@@ -189,7 +189,7 @@ const subTextColor = 'text-foreground/60 hover:text-foreground';
           {/* Logo */}
           <Link to="/" className={`flex items-center gap-2.5 shrink-0 ${dir === 'rtl' ? 'flex-row-reverse' : ''}`}>
           <img
-  src="/logo.webp"
+  src="/logo.png"
   alt="MoroccoPack Digital"
   className={`w-12 h-12 object-contain shrink-0 transition-all duration-300 ${!isSolid ? 'drop-shadow-md' : ''}`}
 />

@@ -93,7 +93,7 @@ export default function Footer() {
           <div>
             <Link to="/" className={`flex items-center gap-2.5 mb-4 ${dir === 'rtl' ? 'flex-row-reverse justify-end' : ''}`}>
               <img
-  src="/logo.webp"
+  src="/logo.png"
   alt="MoroccoPack Digital"
   className="w-14 h-14 object-contain shrink-0"
 />
