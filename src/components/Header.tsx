@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link, NavLink } from 'react-router';
+import { Link, NavLink, useLocation } from 'react-router';
 import { useLanguage, type Lang } from '../i18n/context';
 
 const langOptions: { code: Lang; label: string; short: string; native: string }[] = [
@@ -8,7 +8,7 @@ const langOptions: { code: Lang; label: string; short: string; native: string }[
   { code: 'ar', label: 'Arabic', short: 'AR', native: 'العربية' },
 ];
 
-function LangSwitcher({ scrolled, mobile = false }: { scrolled?: boolean; mobile?: boolean }) {
+function LangSwitcher({ light = false, mobile = false }: { light?: boolean; mobile?: boolean }) {
   const { lang, setLang } = useLanguage();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -51,7 +51,11 @@ function LangSwitcher({ scrolled, mobile = false }: { scrolled?: boolean; mobile
         onClick={() => setOpen(!open)}
         aria-haspopup="listbox"
         aria-expanded={open}
-        className="flex items-center gap-1.5 px-3 py-2 rounded text-sm font-medium transition-colors border border-border text-muted-foreground hover:text-foreground"
+        className={`flex items-center gap-1.5 px-3 py-2 rounded text-sm font-medium transition-colors duration-300 border ${
+          light
+            ? 'border-white/40 text-white hover:border-white/70'
+            : 'border-border text-muted-foreground hover:text-foreground'
+        }`}
       >
         <svg className="w-3.5 h-3.5 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
@@ -90,7 +94,7 @@ function LangSwitcher({ scrolled, mobile = false }: { scrolled?: boolean; mobile
   );
 }
 
-function ServicesDropdown({ scrolled }: { scrolled: boolean }) {
+function ServicesDropdown({ light = false }: { light?: boolean }) {
   const { t } = useLanguage();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -103,7 +107,9 @@ function ServicesDropdown({ scrolled }: { scrolled: boolean }) {
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
-  const subTextColor = 'text-foreground/60 hover:text-foreground';
+  const triggerColor = light
+    ? 'text-white/90 hover:text-white'
+    : 'text-foreground/60 hover:text-foreground';
 
   const subServices = [
     { to: '/services/web-development', label: t('nav.webDev') },
@@ -115,7 +121,7 @@ function ServicesDropdown({ scrolled }: { scrolled: boolean }) {
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className={`flex items-center gap-1 text-sm font-medium transition-colors duration-200 ${subTextColor}`}
+        className={`flex items-center gap-1 text-sm font-medium transition-colors duration-300 ${triggerColor}`}
       >
         {t('nav.services')}
         <svg className={`w-3.5 h-3.5 opacity-60 transition-transform ${open ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -150,22 +156,32 @@ function ServicesDropdown({ scrolled }: { scrolled: boolean }) {
 
 export default function Header() {
   const { t, dir } = useLanguage();
+  const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 48);
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const subTextColor = 'text-foreground/60 hover:text-foreground';
-  const textColor = 'text-foreground';
+  // Transparent-over-hero state only applies at the very top of the
+  // homepage. Any other route, any scroll past ~20px, or the mobile menu
+  // being open all fall back to the existing solid/white navbar.
+  const isHome = location.pathname === '/';
+  const isSolid = !isHome || scrolled || menuOpen;
+
+  const textColor = isSolid ? 'text-foreground' : 'text-white';
+const subTextColor = 'text-foreground/60 hover:text-foreground';
 
   return (
     <header
       className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
-        scrolled || menuOpen ? 'bg-white/95 backdrop-blur-sm shadow-sm border-b border-border' : 'bg-background/80 backdrop-blur-sm border-b border-border/40'
+        isSolid
+          ? 'bg-white/95 backdrop-blur-sm shadow-sm border-b border-border'
+          : 'bg-transparent border-b border-transparent'
       }`}
     >
       <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
@@ -175,11 +191,11 @@ export default function Header() {
           <img
   src="/logo.webp"
   alt="MoroccoPack Digital"
-  className="w-12 h-12 object-contain shrink-0"
+  className={`w-12 h-12 object-contain shrink-0 transition-all duration-300 ${!isSolid ? 'drop-shadow-md' : ''}`}
 />
-            <span className={`font-serif text-xl font-semibold transition-colors duration-300 ${textColor}`}>
-              MoroccoPack<span className="text-accent"> Digital</span>
-            </span>
+<span className="font-serif text-xl font-semibold transition-colors duration-300 text-foreground">
+  MoroccoPack<span className="text-accent"> Digital</span>
+</span>
           </Link>
 
           {/* Desktop Nav */}
@@ -188,7 +204,7 @@ export default function Header() {
               to="/"
               end
               className={({ isActive }) =>
-                `text-sm font-medium transition-colors duration-200 ${isActive ? 'text-primary' : subTextColor}`
+                `text-sm font-medium transition-colors duration-300 ${isActive && isSolid ? 'text-primary' : subTextColor}`
               }
             >
               {t('nav.home')}
@@ -196,16 +212,16 @@ export default function Header() {
             <NavLink
               to="/about"
               className={({ isActive }) =>
-                `text-sm font-medium transition-colors duration-200 ${isActive ? 'text-primary' : subTextColor}`
+                `text-sm font-medium transition-colors duration-300 ${isActive && isSolid ? 'text-primary' : subTextColor}`
               }
             >
               {t('nav.about')}
             </NavLink>
-            <ServicesDropdown scrolled={scrolled} />
+            <ServicesDropdown light={false} />
             <NavLink
               to="/portfolio"
               className={({ isActive }) =>
-                `text-sm font-medium transition-colors duration-200 ${isActive ? 'text-primary' : subTextColor}`
+                `text-sm font-medium transition-colors duration-300 ${isActive && isSolid ? 'text-primary' : subTextColor}`
               }
             >
               {t('nav.portfolio')}
@@ -213,7 +229,7 @@ export default function Header() {
             <NavLink
               to="/pricing"
               className={({ isActive }) =>
-                `text-sm font-medium transition-colors duration-200 ${isActive ? 'text-primary' : subTextColor}`
+                `text-sm font-medium transition-colors duration-300 ${isActive && isSolid ? 'text-primary' : subTextColor}`
               }
             >
               {t('nav.pricing')}
@@ -221,7 +237,7 @@ export default function Header() {
             <NavLink
               to="/contact"
               className={({ isActive }) =>
-                `text-sm font-medium transition-colors duration-200 ${isActive ? 'text-primary' : subTextColor}`
+                `text-sm font-medium transition-colors duration-300 ${isActive && isSolid ? 'text-primary' : subTextColor}`
               }
             >
               {t('nav.contact')}
@@ -231,7 +247,7 @@ export default function Header() {
           {/* Right side */}
           <div className={`flex items-center gap-3 ${dir === 'rtl' ? 'flex-row-reverse' : ''}`}>
             <div className="hidden md:block">
-              <LangSwitcher scrolled={scrolled} />
+              <LangSwitcher light={false} />
             </div>
             <Link
               to="/contact"
@@ -242,9 +258,7 @@ export default function Header() {
             <button
               onClick={() => setMenuOpen(!menuOpen)}
               aria-label="Toggle navigation"
-              className={`md:hidden p-2 rounded transition-colors ${
-                scrolled || menuOpen ? 'text-foreground' : 'text-white'
-              }`}
+className="md:hidden p-2 rounded transition-colors duration-300 text-foreground"
             >
               {menuOpen ? (
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -260,7 +274,7 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu — always solid/white regardless of scroll position, per isSolid including menuOpen */}
       {menuOpen && (
         <div className="md:hidden border-t border-border bg-white">
           <nav className="px-5 py-5 flex flex-col gap-1">

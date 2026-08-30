@@ -1,4 +1,7 @@
 export function img(id: string, w: number, h: number) {
+    if (id.startsWith('/')) {
+    return id;
+  }
   return `https://images.unsplash.com/${id}?w=${w}&h=${h}&fit=crop&auto=format`;
 }
 
@@ -9,7 +12,9 @@ export const IMGS = {
   teamWork: 'photo-1542744094-3a31f272c490',
   office: 'photo-1497366216548-37526070297c',
   office2: 'photo-1600880292203-757bb62b4baf',
-  webDev: 'photo-1571171637578-41bc2dd41cd2',
+  webDev: '/campaign-websites.png',
+  campaignbranding: '/branding.png',
+  webApps:'/digital-platforms.png',
   webDev2: 'photo-1461749280684-dccba630e2f6',
   webDev3: 'photo-1499750310107-5fef28a66643',
   webDev4: 'photo-1467232004584-a241de8bcf5d',
@@ -18,15 +23,18 @@ export const IMGS = {
   social2: 'photo-1432888498266-38ffec3eaf0a',
   social3: 'photo-1553484771-047a44eee27b',
   social4: 'photo-1585079374502-415f8516dcc3',
-  seo: 'photo-1562577309-4932fdd64cd1',
+  seo: '/analytics.png',
   seo2: 'photo-1551288049-bebda4e38f71',
   seo3: 'photo-1517292987719-0369a794ec0f',
   seo4: 'photo-1504868584819-f8e8b4b6d7e3',
   branding: 'photo-1558655146-9f40138edfeb',
-  marketing: 'photo-1563986768609-322da13575f3',
+  marketing: '/social-media.png',
+  digitalmarketing:'/digital-marketing.png',
   marketing2: 'photo-1559526324-4b87b5e36e44',
   content: 'photo-1504639725590-34d0984388bd',
   content2: 'photo-1581291518857-4e27b48ff24e',
+  content3:'/content.png',
+  techsupport:'/technical.png',
   design: 'photo-1581291518857-4e27b48ff24e',
   analytics: 'photo-1551288049-bebda4e38f71',
   collaboration: 'photo-1522202176988-66273c2fd55f',
