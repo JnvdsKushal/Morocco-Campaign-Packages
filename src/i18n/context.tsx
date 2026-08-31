@@ -23,7 +23,7 @@ function getVal(obj: Record<string, unknown>, path: string): string {
 function getStored(): Lang {
   const v = localStorage.getItem('mp_lang');
   if (v === 'en' || v === 'fr' || v === 'ar') return v;
-  return 'en';
+  return 'ar';
 }
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
