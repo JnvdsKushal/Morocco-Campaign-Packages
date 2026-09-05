@@ -199,7 +199,7 @@ const subTextColor = 'text-foreground/60 hover:text-foreground';
           </Link>
 
           {/* Desktop Nav */}
-          <nav className={`hidden md:flex items-center gap-6 ${dir === 'rtl' ? 'flex-row-reverse' : ''}`}>
+          <nav className={`hidden lg:flex items-center gap-5 xl:gap-6 ${dir === 'rtl' ? 'flex-row-reverse' : ''}`}>
             <NavLink
               to="/"
               end
@@ -246,19 +246,19 @@ const subTextColor = 'text-foreground/60 hover:text-foreground';
 
           {/* Right side */}
           <div className={`flex items-center gap-3 ${dir === 'rtl' ? 'flex-row-reverse' : ''}`}>
-            <div className="hidden md:block">
-              <LangSwitcher light={false} />
-            </div>
-            <Link
-              to="/contact"
-              className="hidden md:inline-flex items-center px-5 py-2.5 bg-primary text-white text-sm font-semibold rounded-lg hover:bg-primary/90 transition-colors"
-            >
+<div className="hidden lg:block">
+  <LangSwitcher light={false} />
+</div>
+           <Link
+  to="/contact"
+  className="hidden lg:inline-flex items-center px-5 py-2.5 bg-primary text-white text-sm font-semibold rounded-lg hover:bg-primary/90 transition-colors"
+>
               {t('nav.getStarted')}
             </Link>
             <button
               onClick={() => setMenuOpen(!menuOpen)}
               aria-label="Toggle navigation"
-className="md:hidden p-2 rounded transition-colors duration-300 text-foreground"
+className="lg:hidden p-2 rounded transition-colors duration-300 text-foreground"
             >
               {menuOpen ? (
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -276,7 +276,7 @@ className="md:hidden p-2 rounded transition-colors duration-300 text-foreground"
 
       {/* Mobile Menu — always solid/white regardless of scroll position, per isSolid including menuOpen */}
       {menuOpen && (
-        <div className="md:hidden border-t border-border bg-white">
+        <div className="lg:hidden border-t border-border bg-white">
           <nav className="px-5 py-5 flex flex-col gap-1">
             <div className="mb-3">
               <LangSwitcher mobile />

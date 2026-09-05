@@ -5,7 +5,7 @@ export default function NotFound() {
   const { t } = useLanguage();
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center px-5">
+    <div className="min-h-[100svh] pt-32 bg-background flex items-center justify-center px-5">
       <div className="text-center max-w-md">
         <div className="w-24 h-24 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mx-auto mb-8">
           <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">

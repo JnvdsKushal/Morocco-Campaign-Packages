@@ -151,7 +151,7 @@ function ServiceStory({ dir, t }: { dir: string; t: (key: string) => string }) {
           <div
             key={key}
             ref={(el) => { refs.current[i] = el; }}
-            className={`min-h-[60vh] lg:min-h-[70vh] flex flex-col justify-center border-b border-border last:border-b-0 py-10 lg:py-0 ${dir === 'rtl' ? 'text-right' : ''}`}
+            className={`lg:min-h-[70vh] flex flex-col justify-center border-b border-border last:border-b-0 py-10 lg:py-0 ${dir === 'rtl' ? 'text-right' : ''}`}
           >
             <Link to="/services" className="group block">
               <p className="text-xs font-mono text-muted-foreground mb-4">{String(i + 1).padStart(2, '0')}</p>
